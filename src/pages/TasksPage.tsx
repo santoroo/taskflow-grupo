@@ -3,9 +3,9 @@ import type { Task } from '../types';
 import './TasksPage.css';
 
 export default function TasksPage() {
-  // TODO (quem fizer src/services + TaskContext): trocar esta lista fixa pelas
-  // tarefas vindas da API (GET em VITE_API_URL) através do TaskContext.
-  // Nesta versão inicial a lista é sempre vazia de propósito.
+  // TODO (branch ronaldo-vieira): trocar esta lista fixa pelas tarefas do
+  // TaskContext, que deve carregá-las com getTasks() de src/services.
+  // Enquanto o contexto não existe, a lista fica vazia de propósito.
   const tarefas: Task[] = [];
 
   return (
