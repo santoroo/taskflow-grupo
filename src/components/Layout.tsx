@@ -12,8 +12,10 @@ export default function Layout() {
       </main>
 
       {/*
-        TODO (quem fizer o TaskModal): renderizar o <TaskModal /> aqui,
-        controlado pelo estado de "modal aberto" (useState local ou TaskContext).
+        TODO (branch gabriel-santoro): controlar aqui o estado de "modal aberto"
+        (useState local ou TaskContext) e renderizar o <TaskModal />, passando a
+        função de abrir para o Header.
+        O componente <TaskModal /> em si vem da branch gabriel-marinho.
       */}
     </div>
   );

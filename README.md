@@ -46,9 +46,9 @@ API ainda. Cada parte que falta está marcada com um comentário `TODO` no códi
 
 | Branch | O que implementar | Onde estão os TODOs |
 | --- | --- | --- |
-| `gabriel-santoro` | `src/services` com o Axios (CRUD no CrudCrud) | `src/types/task.ts`, `src/pages/TasksPage.tsx` |
+| `gabriel-santoro` | `src/services` com o Axios (CRUD no CrudCrud) e a abertura do modal pelo Header/Layout | `src/types/task.ts`, `src/pages/TasksPage.tsx`, `src/components/Header.tsx`, `src/components/Layout.tsx` |
 | `ronaldo-vieira` | `TaskContext` (estado global + ações das tarefas) | `src/main.tsx`, `src/components/TaskList.tsx`, `src/components/TaskCard.tsx`, `src/components/TaskForm.tsx` |
-| `gabriel-marinho` | `TaskModal` e a abertura dele pelo Header/Layout | `src/components/Header.tsx`, `src/components/Layout.tsx`, `src/components/TaskForm.tsx` |
+| `gabriel-marinho` | o componente `TaskModal` (que usa o `TaskForm` por dentro) | `src/components/TaskForm.tsx` |
 
 > Observação: o CrudCrud devolve o identificador no campo `_id`. A camada de
 > serviço precisa converter a resposta para o tipo `Task` (que usa `id`).

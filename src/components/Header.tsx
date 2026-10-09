@@ -30,8 +30,10 @@ export default function Header() {
       </nav>
 
       {/*
-        TODO (quem fizer o TaskModal): este botão deve abrir o modal de nova tarefa.
-        Por enquanto ele não tem ação nenhuma.
+        TODO (branch gabriel-santoro): este botão deve abrir o modal de nova
+        tarefa, acionando o estado de "modal aberto" que mora no Layout.
+        O componente <TaskModal /> em si vem da branch gabriel-marinho.
+        Por enquanto o botão não tem ação nenhuma.
       */}
       <button type="button" className="header__botao-nova">
         Nova tarefa
