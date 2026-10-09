@@ -1,0 +1,72 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.header__logo {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.header__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.header__nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-right: auto;
+}
+
+.header__link {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  color: #475569;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.header__link:hover {
+  background-color: #f1f5f9;
+}
+
+.header__link--ativo {
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.header__botao-nova {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.header__botao-nova:hover {
+  background-color: #1d4ed8;
+}
