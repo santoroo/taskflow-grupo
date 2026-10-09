@@ -17,7 +17,7 @@ export default function Layout() {
 
   return (
     <div className="layout">
-      <Header />
+      <Header abrirModal={abrirModal} />
 
       <main className="layout__conteudo">
         <Outlet />

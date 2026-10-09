@@ -1,7 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import './Header.css';
 
-export default function Header() {
+interface HeaderProps {
+  // Vem do Layout, que é quem guarda o estado do modal.
+  abrirModal: () => void;
+}
+
+export default function Header({ abrirModal }: HeaderProps) {
   return (
     <header className="header">
       <div className="header__brand">
@@ -29,13 +34,11 @@ export default function Header() {
         </NavLink>
       </nav>
 
-      {/*
-        TODO (branch gabriel-santoro): este botão deve abrir o modal de nova
-        tarefa, acionando o estado de "modal aberto" que mora no Layout.
-        O componente <TaskModal /> em si vem da branch gabriel-marinho.
-        Por enquanto o botão não tem ação nenhuma.
-      */}
-      <button type="button" className="header__botao-nova">
+      <button
+        type="button"
+        className="header__botao-nova"
+        onClick={abrirModal}
+      >
         Nova tarefa
       </button>
     </header>
