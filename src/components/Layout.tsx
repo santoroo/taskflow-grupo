@@ -15,6 +15,13 @@ export default function Layout() {
     setModalAberto(false);
   }
 
+  // O <TaskModal /> ainda não existe (vem da branch gabriel-marinho), então
+  // "modalAberto" e "fecharModal" ainda não têm quem os consuma. Os dois "void"
+  // abaixo apenas evitam o erro de variável não usada do tsc e devem ser
+  // apagados quando o modal for plugado no lugar marcado pelo TODO lá embaixo.
+  void modalAberto;
+  void fecharModal;
+
   return (
     <div className="layout">
       <Header abrirModal={abrirModal} />
@@ -24,10 +31,10 @@ export default function Layout() {
       </main>
 
       {/*
-        TODO (branch gabriel-santoro): controlar aqui o estado de "modal aberto"
-        (useState local ou TaskContext) e renderizar o <TaskModal />, passando a
-        função de abrir para o Header.
-        O componente <TaskModal /> em si vem da branch gabriel-marinho.
+        TODO (branch gabriel-marinho): o <TaskModal /> entra exatamente aqui,
+        recebendo o estado e a função de fechar que já estão prontos acima:
+
+        <TaskModal aberto={modalAberto} onFechar={fecharModal} />
       */}
     </div>
   );
