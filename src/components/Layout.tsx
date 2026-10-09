@@ -1,8 +1,20 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import './Layout.css';
 
 export default function Layout() {
+  // Estado de abertura do modal de nova tarefa.
+  const [modalAberto, setModalAberto] = useState(false);
+
+  function abrirModal() {
+    setModalAberto(true);
+  }
+
+  function fecharModal() {
+    setModalAberto(false);
+  }
+
   return (
     <div className="layout">
       <Header />
