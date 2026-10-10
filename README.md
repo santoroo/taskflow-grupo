@@ -37,7 +37,10 @@ src/
 │   ├── Sidebar/      Sidebar.tsx + Sidebar.css
 │   ├── TaskCard/     TaskCard.tsx + TaskCard.css
 │   ├── TaskForm/     TaskForm.tsx + TaskForm.css
-│   └── TaskList/     TaskList.tsx + TaskList.css
+│   ├── TaskList/     TaskList.tsx + TaskList.css
+│   └── TaskModal/    TaskModal.tsx + TaskModal.css
+├── context/
+│   └── TaskContext.tsx    TaskProvider e o hook useTasks()
 ├── pages/
 │   ├── Completed/    Completed.tsx
 │   ├── Tasks/        Tasks.tsx + Tasks.css
@@ -51,10 +54,12 @@ src/
 ├── types/
 │   └── Tarefa.ts     tipos Tarefa e Prioridade
 ├── App.tsx           BrowserRouter + rotas
-└── main.tsx          render + estilos globais
+└── main.tsx          render + TaskProvider + estilos globais
 ```
 
-Os arquivos CSS são os fornecidos pelo professor (`taskflow_css.zip`).
+Os arquivos CSS são os fornecidos pelo professor (`taskflow_css.zip`), exceto
+o `TaskModal.css`, que segue o mesmo padrão BEM e usa as variáveis de
+`styles/variables.css`.
 
 Rotas (filhas do `Layout`):
 
@@ -65,24 +70,32 @@ Rotas (filhas do `Layout`):
 | `/tarefas` | `Tasks` (Todas as tarefas) |
 | `/concluidas` | `Completed` (Concluídas) |
 
-A página `Tasks` segue a versão consolidada da seção 7.4: carrega as tarefas do
-CrudCrud com `useEffect`, cadastra pelo `TaskForm` (`POST /tarefas`) e exclui
-pelo `TaskCard` (`DELETE /tarefas/:id`).
+## Como funciona
+
+- **`TaskContext`** (`src/context/TaskContext.tsx`): o `TaskProvider` envolve o
+  `App` em `main.tsx` e guarda `tarefas`, `carregando` e `erro`. Ao montar, ele
+  carrega as tarefas com `listarTarefas()` (`GET /tarefas`) num `useEffect` e
+  expõe `adicionarTarefa` (`criarTarefa()`, `POST /tarefas`) e `removerTarefa`
+  (`excluirTarefa()`, `DELETE /tarefas/:id`). Componentes e páginas acessam tudo
+  isso pelo hook `useTasks()`.
+- **Página `Tasks`**: lê a lista, o carregamento e o erro do `useTasks()` e
+  exclui pelo `TaskCard`. Ela não cria tarefas.
+- **Criação de tarefas**: só pelo botão **Nova tarefa** do `Header`, em qualquer
+  página. O `Layout` guarda o estado `modalAberto` (`abrirModal`/`fecharModal`) e
+  renderiza o `TaskModal`.
+- **`TaskModal`** (`src/components/TaskModal/`): props
+  `{ aberto: boolean; aoFechar: () => void }`. Mostra uma camada sobre a página
+  com o `TaskForm` dentro. Salvar chama `adicionarTarefa` e depois `aoFechar`.
+  Fecha também com **Cancelar**, com a tecla **Esc** e com um clique fora da
+  caixa do formulário.
 
 ## Divisão do trabalho
 
-A `main` tem o código da aula 06. Cada integrante trabalha na sua branch e
-abre PR para a `main`:
+A `main` tem o código da aula 06 com o contexto de tarefas e o `TaskModal`.
+Cada integrante trabalha na sua branch e abre PR para a `main`:
 
 | Branch | Responsável por |
 | --- | --- |
 | `gabriel-santoro` | camada de serviço (`src/services/tarefaService.ts`) e abertura do modal no `Layout`/`Header` |
 | `ronaldo-vieira` | contexto compartilhado de tarefas |
 | `gabriel-marinho` | `TaskModal` usando o `TaskForm` |
-
-### Abertura do modal (gabriel-santoro)
-
-O `Layout` guarda o estado `modalAberto` e as funções `abrirModal` e
-`fecharModal`. O botão **Nova tarefa** do `Header` recebe `abrirModal` por
-props. O ponto onde o `<TaskModal />` deve ser renderizado está marcado com um
-`TODO` em `src/components/Layout/Layout.tsx`.

@@ -1,78 +1,10 @@
-import { useEffect, useState } from "react";
-
-import { TaskForm } from "../../components/TaskForm/TaskForm";
 import { TaskList } from "../../components/TaskList/TaskList";
-import { criarTarefa, excluirTarefa, listarTarefas } from "../../services/tarefaService";
-import type { Tarefa } from "../../types/Tarefa";
+import { useTasks } from "../../context/TaskContext";
 
 import "./Tasks.css";
 
 export function Tasks() {
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
-
-  const [carregando, setCarregando] = useState(true);
-
-  const [erro, setErro] = useState("");
-
-  const [formularioAberto, setFormularioAberto] = useState(false);
-
-  useEffect(() => {
-    async function carregarTarefas() {
-      try {
-        setCarregando(true);
-        setErro("");
-
-        const dados = await listarTarefas();
-
-        setTarefas(dados);
-      } catch {
-        setErro(
-          "Não foi possível carregar as tarefas.",
-        );
-      } finally {
-        setCarregando(false);
-      }
-    }
-
-    carregarTarefas();
-  }, []);
-
-  async function adicionarTarefa(novaTarefa: Omit<Tarefa, "_id">) {
-    try {
-      setErro("");
-
-      const tarefaCriada = await criarTarefa(novaTarefa);
-
-      setTarefas((tarefasAtuais) => [
-        tarefaCriada,
-        ...tarefasAtuais,
-      ]);
-
-      setFormularioAberto(false);
-    } catch {
-      setErro(
-        "Não foi possível criar a tarefa.",
-      );
-    }
-  }
-
-  async function removerTarefa(id: string) {
-    try {
-      setErro("");
-
-      await excluirTarefa(id);
-
-      setTarefas((tarefasAtuais) =>
-        tarefasAtuais.filter(
-          (tarefa) => tarefa._id !== id,
-        ),
-      );
-    } catch {
-      setErro(
-        "Não foi possível excluir a tarefa.",
-      );
-    }
-  }
+  const { tarefas, carregando, erro, removerTarefa } = useTasks();
 
   return (
     <section className="tasks-page">
@@ -89,30 +21,12 @@ export function Tasks() {
             cadastradas.
           </p>
         </div>
-
-        <button
-          type="button"
-          onClick={() =>
-            setFormularioAberto(true)
-          }
-        >
-          Nova tarefa
-        </button>
       </div>
 
       {erro && (
         <p className="tasks-page__error">
           {erro}
         </p>
-      )}
-
-      {formularioAberto && (
-        <TaskForm
-          aoSalvar={adicionarTarefa}
-          aoCancelar={() =>
-            setFormularioAberto(false)
-          }
-        />
       )}
 
       {carregando ? (
