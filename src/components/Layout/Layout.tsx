@@ -19,7 +19,7 @@ export function Layout() {
 
   return (
     <div className="app-layout">
-      <Sidebar />
+      <Sidebar abrirModal={abrirModal} />
 
       <div className="app-layout__content">
         <Header abrirModal={abrirModal} />

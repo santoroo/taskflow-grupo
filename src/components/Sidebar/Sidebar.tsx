@@ -9,7 +9,10 @@ const itensMenu = [
   { titulo: "Concluídas", caminho: "/concluidas", icone: CircleCheckBig },
 ];
 
-export function Sidebar() {
+// abrirModal vem do Layout, que é quem guarda o estado do modal.
+type SidebarProps = { abrirModal: () => void };
+
+export function Sidebar({ abrirModal }: Readonly<SidebarProps>) {
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
@@ -24,7 +27,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      <button className="sidebar__new-task" type="button">
+      <button className="sidebar__new-task" type="button" onClick={abrirModal}>
         <Plus size={18} />
         Nova tarefa
       </button>
