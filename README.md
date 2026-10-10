@@ -80,14 +80,30 @@ Rotas (filhas do `Layout`):
   isso pelo hook `useTasks()`.
 - **Página `Tasks`**: lê a lista, o carregamento e o erro do `useTasks()` e
   exclui pelo `TaskCard`. Ela não cria tarefas.
-- **Criação de tarefas**: só pelo botão **Nova tarefa** do `Header`, em qualquer
-  página. O `Layout` guarda o estado `modalAberto` (`abrirModal`/`fecharModal`) e
-  renderiza o `TaskModal`.
+- **Criação de tarefas**: pelos botões **Nova tarefa** do `Header` e da
+  `Sidebar`, em qualquer página. O `Layout` guarda o estado `modalAberto`
+  (`abrirModal`/`fecharModal`) e renderiza o `TaskModal`.
 - **`TaskModal`** (`src/components/TaskModal/`): props
   `{ aberto: boolean; aoFechar: () => void }`. Mostra uma camada sobre a página
   com o `TaskForm` dentro. Salvar chama `adicionarTarefa` e depois `aoFechar`.
   Fecha também com **Cancelar**, com a tecla **Esc** e com um clique fora da
   caixa do formulário.
+- **Telas menores (até 960px)**: a `Sidebar` fica escondida e abre pelo botão de
+  menu do `Header`. Ela fecha ao escolher um link, ao clicar em **Nova tarefa**
+  ou ao clicar fora dela.
+
+### Erros tratados
+
+- **API fora do ar ou endpoint expirado**: a página Tasks mostra
+  "Não foi possível carregar as tarefas.".
+- **`.env` ausente** (ou salvo como `.env.txt` no Windows): a mensagem avisa que
+  a `VITE_API_URL` não está configurada. Depois de criar ou mudar o `.env`, é
+  preciso reiniciar o `npm run dev`.
+- **Falha ao criar**: o modal continua aberto com o que foi digitado e mostra o
+  erro, para tentar de novo.
+- **Título só com espaços**: o `TaskForm` recusa e pede um título.
+- **Clique duplo em Excluir**: só um `DELETE` é enviado.
+- **Rota inexistente**: redireciona para a página Hoje.
 
 ## Divisão do trabalho
 
