@@ -30,10 +30,18 @@ export function TaskForm({ aoSalvar, aoCancelar }: Readonly<TaskFormProps>) {
   async function enviarFormulario(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
 
+    // O "required" do input aceita só espaços; aqui o título vazio é recusado.
+    const titulo = formulario.titulo.trim();
+
+    if (!titulo) {
+      setErro("Informe um título para a tarefa.");
+      return;
+    }
+
     try {
       setSalvando(true);
       setErro("");
-      await aoSalvar(formulario);
+      await aoSalvar({ ...formulario, titulo });
       setFormulario(estadoInicial);
     } catch {
       // Mantém o que foi digitado para tentar de novo.
