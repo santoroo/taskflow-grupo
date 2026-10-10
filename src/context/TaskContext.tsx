@@ -1,7 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
-import { criarTarefa, excluirTarefa, listarTarefas } from "../services/tarefaService";
+import {
+  apiConfigurada,
+  criarTarefa,
+  excluirTarefa,
+  listarTarefas,
+} from "../services/tarefaService";
 import type { Tarefa } from "../types/Tarefa";
 
 type TaskContextValor = {
@@ -34,7 +39,9 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
         setTarefas(dados);
       } catch {
         setErro(
-          "Não foi possível carregar as tarefas.",
+          apiConfigurada
+            ? "Não foi possível carregar as tarefas."
+            : "Não foi possível carregar as tarefas: a VITE_API_URL não está configurada no .env.",
         );
       } finally {
         setCarregando(false);
