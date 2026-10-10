@@ -14,9 +14,21 @@
   padding-bottom: 56px;
 }
 
+.app-layout__backdrop {
+  display: none;
+}
+
 @media (max-width: 960px) {
   .app-layout__content {
     margin-left: 0;
+  }
+
+  .app-layout__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    display: block;
+    background: rgba(15, 23, 42, 0.45);
   }
 
   .app-layout__main {

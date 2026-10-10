@@ -1,7 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
-import { criarTarefa, excluirTarefa, listarTarefas } from "../services/tarefaService";
+import {
+  apiConfigurada,
+  criarTarefa,
+  excluirTarefa,
+  listarTarefas,
+} from "../services/tarefaService";
 import type { Tarefa } from "../types/Tarefa";
 
 type TaskContextValor = {
@@ -23,6 +28,9 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
 
   const [erro, setErro] = useState("");
 
+  // Ids com exclusão em andamento: evita mandar dois DELETE no clique duplo.
+  const idsExcluindo = useRef(new Set<string>());
+
   useEffect(() => {
     async function carregarTarefas() {
       try {
@@ -34,7 +42,9 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
         setTarefas(dados);
       } catch {
         setErro(
-          "Não foi possível carregar as tarefas.",
+          apiConfigurada
+            ? "Não foi possível carregar as tarefas."
+            : "Não foi possível carregar as tarefas: a VITE_API_URL não está configurada no .env.",
         );
       } finally {
         setCarregando(false);
@@ -44,24 +54,26 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
     carregarTarefas();
   }, []);
 
+  // Sem try/catch: se a API falhar, o erro chega ao TaskForm, que avisa
+  // dentro do modal e mantém o que foi digitado.
   async function adicionarTarefa(novaTarefa: Omit<Tarefa, "_id">) {
-    try {
-      setErro("");
+    const tarefaCriada = await criarTarefa(novaTarefa);
 
-      const tarefaCriada = await criarTarefa(novaTarefa);
+    setErro("");
 
-      setTarefas((tarefasAtuais) => [
-        tarefaCriada,
-        ...tarefasAtuais,
-      ]);
-    } catch {
-      setErro(
-        "Não foi possível criar a tarefa.",
-      );
-    }
+    setTarefas((tarefasAtuais) => [
+      tarefaCriada,
+      ...tarefasAtuais,
+    ]);
   }
 
   async function removerTarefa(id: string) {
+    if (idsExcluindo.current.has(id)) {
+      return;
+    }
+
+    idsExcluindo.current.add(id);
+
     try {
       setErro("");
 
@@ -76,6 +88,8 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
       setErro(
         "Não foi possível excluir a tarefa.",
       );
+    } finally {
+      idsExcluindo.current.delete(id);
     }
   }
 

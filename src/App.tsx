@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout/Layout";
 import { Completed } from "./pages/Completed/Completed";
 import { Tasks } from "./pages/Tasks/Tasks";
@@ -14,6 +14,7 @@ export default function App() {
           <Route path="/proximas" element={<Upcoming />} />
           <Route path="/tarefas" element={<Tasks />} />
           <Route path="/concluidas" element={<Completed />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
