@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { TaskForm } from "../../components/TaskForm/TaskForm";
 import { TaskList } from "../../components/TaskList/TaskList";
-import { criarTarefa, listarTarefas } from "../../services/tarefaService";
+import { criarTarefa, excluirTarefa, listarTarefas } from "../../services/tarefaService";
 import type { Tarefa } from "../../types/Tarefa";
 
 import "./Tasks.css";
@@ -56,6 +56,24 @@ export function Tasks() {
     }
   }
 
+  async function removerTarefa(id: string) {
+    try {
+      setErro("");
+
+      await excluirTarefa(id);
+
+      setTarefas((tarefasAtuais) =>
+        tarefasAtuais.filter(
+          (tarefa) => tarefa._id !== id,
+        ),
+      );
+    } catch {
+      setErro(
+        "Não foi possível excluir a tarefa.",
+      );
+    }
+  }
+
   return (
     <section className="tasks-page">
       <div className="tasks-page__heading">
@@ -100,7 +118,7 @@ export function Tasks() {
       {carregando ? (
         <p>Carregando tarefas...</p>
       ) : (
-        <TaskList tarefas={tarefas} />
+        <TaskList tarefas={tarefas} aoExcluir={removerTarefa} />
       )}
     </section>
   );
