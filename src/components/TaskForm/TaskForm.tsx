@@ -18,6 +18,7 @@ const estadoInicial: NovaTarefa = {
 export function TaskForm({ aoSalvar, aoCancelar }: Readonly<TaskFormProps>) {
   const [formulario, setFormulario] = useState<NovaTarefa>(estadoInicial);
   const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState("");
 
   function alterarCampo(campo: keyof NovaTarefa, valor: string | boolean) {
     setFormulario((estadoAtual) => ({
@@ -31,8 +32,12 @@ export function TaskForm({ aoSalvar, aoCancelar }: Readonly<TaskFormProps>) {
 
     try {
       setSalvando(true);
+      setErro("");
       await aoSalvar(formulario);
       setFormulario(estadoInicial);
+    } catch {
+      // Mantém o que foi digitado para tentar de novo.
+      setErro("Não foi possível criar a tarefa. Tente novamente.");
     } finally {
       setSalvando(false);
     }
@@ -112,6 +117,12 @@ export function TaskForm({ aoSalvar, aoCancelar }: Readonly<TaskFormProps>) {
           placeholder="Ex.: Projeto Atlas"
         />
       </label>
+
+      {erro && (
+        <p className="task-form__error">
+          {erro}
+        </p>
+      )}
 
       <div className="task-form__actions">
         <button

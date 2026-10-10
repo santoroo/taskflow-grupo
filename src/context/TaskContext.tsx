@@ -54,21 +54,17 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
     carregarTarefas();
   }, []);
 
+  // Sem try/catch: se a API falhar, o erro chega ao TaskForm, que avisa
+  // dentro do modal e mantém o que foi digitado.
   async function adicionarTarefa(novaTarefa: Omit<Tarefa, "_id">) {
-    try {
-      setErro("");
+    const tarefaCriada = await criarTarefa(novaTarefa);
 
-      const tarefaCriada = await criarTarefa(novaTarefa);
+    setErro("");
 
-      setTarefas((tarefasAtuais) => [
-        tarefaCriada,
-        ...tarefasAtuais,
-      ]);
-    } catch {
-      setErro(
-        "Não foi possível criar a tarefa.",
-      );
-    }
+    setTarefas((tarefasAtuais) => [
+      tarefaCriada,
+      ...tarefasAtuais,
+    ]);
   }
 
   async function removerTarefa(id: string) {
