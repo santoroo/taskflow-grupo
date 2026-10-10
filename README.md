@@ -1,9 +1,10 @@
 # TaskFlow
 
-Gerenciador de tarefas feito como trabalho em grupo da faculdade.
+Gerenciador de tarefas feito como trabalho em grupo da faculdade, partindo do
+código da **aula 06** (Prof. José Carmino), seções 3 a 7.
 
-**Stack:** React + TypeScript + Vite, React Router, Axios.
-**API:** [CrudCrud](https://crudcrud.com) — recurso `/tasks`.
+**Stack:** React + TypeScript + Vite, React Router, Axios, lucide-react.
+**API:** [CrudCrud](https://crudcrud.com) — recurso `/tarefas`.
 
 ## Como rodar
 
@@ -13,7 +14,8 @@ cp .env.example .env   # e coloque o seu endpoint do CrudCrud
 npm run dev
 ```
 
-A variável `VITE_API_URL` guarda a URL base da API e é lida via
+O `.env` guarda o endereço base da API na variável `VITE_API_URL`
+(ex.: `VITE_API_URL=https://crudcrud.com/api/SEU_ENDPOINT`), lida no código por
 `import.meta.env.VITE_API_URL`. O `.env` não vai para o Git.
 
 ## Scripts
@@ -29,33 +31,58 @@ A variável `VITE_API_URL` guarda a URL base da API e é lida via
 
 ```
 src/
-├── components/     Layout, Header, TaskList, TaskCard, TaskForm (+ CSS em BEM)
-├── services/       api.ts (instância Axios) e taskService.ts (CRUD)
-├── pages/          TasksPage (lista) e AboutPage (sobre)
-├── types/          tipo Task e NovaTask
-├── App.tsx         rotas do React Router
-└── main.tsx        BrowserRouter + render
+├── components/
+│   ├── Header/       Header.tsx + Header.css
+│   ├── Layout/       Layout.tsx + Layout.css
+│   ├── Sidebar/      Sidebar.tsx + Sidebar.css
+│   ├── TaskCard/     TaskCard.tsx + TaskCard.css
+│   ├── TaskForm/     TaskForm.tsx + TaskForm.css
+│   └── TaskList/     TaskList.tsx + TaskList.css
+├── pages/
+│   ├── Completed/    Completed.tsx
+│   ├── Tasks/        Tasks.tsx + Tasks.css
+│   ├── Today/        Today.tsx
+│   └── Upcoming/     Upcoming.tsx
+├── services/
+│   └── tarefaService.ts   listarTarefas, criarTarefa, excluirTarefa (Axios)
+├── styles/
+│   ├── global.css
+│   └── variables.css
+├── types/
+│   └── Tarefa.ts     tipos Tarefa e Prioridade
+├── App.tsx           BrowserRouter + rotas
+└── main.tsx          render + estilos globais
 ```
 
-Rotas: `/` (lista de tarefas) e `/sobre`.
+Os arquivos CSS são os fornecidos pelo professor (`taskflow_css.zip`).
+
+Rotas (filhas do `Layout`):
+
+| Caminho | Página |
+| --- | --- |
+| `/` | `Today` (Hoje) |
+| `/proximas` | `Upcoming` (Próximas) |
+| `/tarefas` | `Tasks` (Todas as tarefas) |
+| `/concluidas` | `Completed` (Concluídas) |
+
+A página `Tasks` segue a versão consolidada da seção 7.4: carrega as tarefas do
+CrudCrud com `useEffect`, cadastra pelo `TaskForm` (`POST /tarefas`) e exclui
+pelo `TaskCard` (`DELETE /tarefas/:id`).
 
 ## Divisão do trabalho
 
-A `main` tem apenas a **base comum**: tipos, rotas, layout e componentes de
-exibição. Nesta versão a lista aparece vazia de propósito — nada conversa com a
-API ainda. Cada parte que falta está marcada com um comentário `TODO` no código:
+A `main` tem o código da aula 06. Cada integrante trabalha na sua branch e
+abre PR para a `main`:
 
-| Branch | O que implementar | Onde estão os TODOs |
-| --- | --- | --- |
-| `gabriel-santoro` | ~~`src/services` com o Axios (CRUD no CrudCrud)~~ feito · falta a abertura do modal pelo Header/Layout | `src/components/Header.tsx`, `src/components/Layout.tsx` |
-| `ronaldo-vieira` | `TaskContext` (estado global + ações das tarefas, usando `src/services`) | `src/main.tsx`, `src/pages/TasksPage.tsx`, `src/components/TaskList.tsx`, `src/components/TaskCard.tsx`, `src/components/TaskForm.tsx` |
-| `gabriel-marinho` | o componente `TaskModal` (que usa o `TaskForm` por dentro) | `src/components/TaskForm.tsx` |
+| Branch | Responsável por |
+| --- | --- |
+| `gabriel-santoro` | camada de serviço (`src/services/tarefaService.ts`) e abertura do modal no `Layout`/`Header` |
+| `ronaldo-vieira` | contexto compartilhado de tarefas |
+| `gabriel-marinho` | `TaskModal` usando o `TaskForm` |
 
-### Camada de serviço
+### Abertura do modal (gabriel-santoro)
 
-`src/services/taskService.ts` expõe `getTasks`, `createTask`, `updateTask` e
-`deleteTask`, todas tipadas com `Task`. O CrudCrud devolve o identificador no
-campo `_id`, então o serviço converte a resposta para `Task` (com `id`) na
-leitura e não manda o `_id` no corpo do `PUT`.
-
-Cada integrante trabalha na sua branch e abre PR para a `main`.
+O `Layout` guarda o estado `modalAberto` e as funções `abrirModal` e
+`fecharModal`. O botão **Nova tarefa** do `Header` recebe `abrirModal` por
+props. O ponto onde o `<TaskModal />` deve ser renderizado está marcado com um
+`TODO` em `src/components/Layout/Layout.tsx`.
