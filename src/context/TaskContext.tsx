@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 import {
@@ -27,6 +27,9 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
   const [carregando, setCarregando] = useState(true);
 
   const [erro, setErro] = useState("");
+
+  // Ids com exclusão em andamento: evita mandar dois DELETE no clique duplo.
+  const idsExcluindo = useRef(new Set<string>());
 
   useEffect(() => {
     async function carregarTarefas() {
@@ -69,6 +72,12 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
   }
 
   async function removerTarefa(id: string) {
+    if (idsExcluindo.current.has(id)) {
+      return;
+    }
+
+    idsExcluindo.current.add(id);
+
     try {
       setErro("");
 
@@ -83,6 +92,8 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
       setErro(
         "Não foi possível excluir a tarefa.",
       );
+    } finally {
+      idsExcluindo.current.delete(id);
     }
   }
 
