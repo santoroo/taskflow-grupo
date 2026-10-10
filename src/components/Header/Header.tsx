@@ -1,12 +1,21 @@
-import { Plus, Search } from "lucide-react";
+import { Menu, Plus, Search } from "lucide-react";
 import "./Header.css";
 
-// abrirModal vem do Layout, que é quem guarda o estado do modal.
-type HeaderProps = { abrirModal: () => void };
+// abrirModal e abrirMenu vêm do Layout, que guarda o estado do modal e do menu.
+type HeaderProps = { abrirModal: () => void; abrirMenu: () => void };
 
-export function Header({ abrirModal }: Readonly<HeaderProps>) {
+export function Header({ abrirModal, abrirMenu }: Readonly<HeaderProps>) {
   return (
     <header className="header">
+      <button
+        className="header__menu"
+        type="button"
+        aria-label="Abrir menu"
+        onClick={abrirMenu}
+      >
+        <Menu size={20} />
+      </button>
+
       <div className="header__search">
         <Search size={18} />
         <input

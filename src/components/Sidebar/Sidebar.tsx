@@ -9,12 +9,21 @@ const itensMenu = [
   { titulo: "Concluídas", caminho: "/concluidas", icone: CircleCheckBig },
 ];
 
-// abrirModal vem do Layout, que é quem guarda o estado do modal.
-type SidebarProps = { abrirModal: () => void };
+// Os estados do modal e do menu (telas menores) ficam no Layout.
+type SidebarProps = {
+  abrirModal: () => void;
+  menuAberto: boolean;
+  fecharMenu: () => void;
+};
 
-export function Sidebar({ abrirModal }: Readonly<SidebarProps>) {
+export function Sidebar({ abrirModal, menuAberto, fecharMenu }: Readonly<SidebarProps>) {
+  function abrirNovaTarefa() {
+    fecharMenu();
+    abrirModal();
+  }
+
   return (
-    <aside className="sidebar">
+    <aside className={menuAberto ? "sidebar sidebar--open" : "sidebar"}>
       <div className="sidebar__brand">
         <img
           src="https://kiro.dev/images/community/events/thumbnails/meetup2.svg"
@@ -27,7 +36,7 @@ export function Sidebar({ abrirModal }: Readonly<SidebarProps>) {
         </div>
       </div>
 
-      <button className="sidebar__new-task" type="button" onClick={abrirModal}>
+      <button className="sidebar__new-task" type="button" onClick={abrirNovaTarefa}>
         <Plus size={18} />
         Nova tarefa
       </button>
@@ -40,6 +49,7 @@ export function Sidebar({ abrirModal }: Readonly<SidebarProps>) {
             <NavLink
               key={item.caminho}
               to={item.caminho}
+              onClick={fecharMenu}
               className={({ isActive }) =>
                 isActive
                   ? "sidebar__link sidebar__link--active"
