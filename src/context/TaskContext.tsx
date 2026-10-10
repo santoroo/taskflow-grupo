@@ -1,0 +1,101 @@
+import { createContext, useContext, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+
+import { criarTarefa, excluirTarefa, listarTarefas } from "../services/tarefaService";
+import type { Tarefa } from "../types/Tarefa";
+
+type TaskContextValor = {
+  tarefas: Tarefa[];
+  carregando: boolean;
+  erro: string;
+  adicionarTarefa: (novaTarefa: Omit<Tarefa, "_id">) => Promise<void>;
+  removerTarefa: (id: string) => Promise<void>;
+};
+
+const TaskContext = createContext<TaskContextValor | null>(null);
+
+type TaskProviderProps = { children: ReactNode };
+
+export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
+  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+
+  const [carregando, setCarregando] = useState(true);
+
+  const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    async function carregarTarefas() {
+      try {
+        setCarregando(true);
+        setErro("");
+
+        const dados = await listarTarefas();
+
+        setTarefas(dados);
+      } catch {
+        setErro(
+          "Não foi possível carregar as tarefas.",
+        );
+      } finally {
+        setCarregando(false);
+      }
+    }
+
+    carregarTarefas();
+  }, []);
+
+  async function adicionarTarefa(novaTarefa: Omit<Tarefa, "_id">) {
+    try {
+      setErro("");
+
+      const tarefaCriada = await criarTarefa(novaTarefa);
+
+      setTarefas((tarefasAtuais) => [
+        tarefaCriada,
+        ...tarefasAtuais,
+      ]);
+    } catch {
+      setErro(
+        "Não foi possível criar a tarefa.",
+      );
+    }
+  }
+
+  async function removerTarefa(id: string) {
+    try {
+      setErro("");
+
+      await excluirTarefa(id);
+
+      setTarefas((tarefasAtuais) =>
+        tarefasAtuais.filter(
+          (tarefa) => tarefa._id !== id,
+        ),
+      );
+    } catch {
+      setErro(
+        "Não foi possível excluir a tarefa.",
+      );
+    }
+  }
+
+  return (
+    <TaskContext.Provider
+      value={{ tarefas, carregando, erro, adicionarTarefa, removerTarefa }}
+    >
+      {children}
+    </TaskContext.Provider>
+  );
+}
+
+// O hook fica junto do TaskProvider; editar este arquivo só recarrega a página no dev.
+// oxlint-disable-next-line react/only-export-components
+export function useTasks() {
+  const contexto = useContext(TaskContext);
+
+  if (!contexto) {
+    throw new Error("useTasks deve ser usado dentro de um TaskProvider.");
+  }
+
+  return contexto;
+}
