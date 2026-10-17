@@ -79,11 +79,15 @@ Rotas (filhas do `Layout`):
   expõe `adicionarTarefa` (`criarTarefa()`, `POST /tarefas`) e `removerTarefa`
   (`excluirTarefa()`, `DELETE /tarefas/:id`). Componentes e páginas acessam tudo
   isso pelo hook `useTarefas()`.
-- **Página `Tasks`**: lê a lista, o carregamento e o erro do `useTarefas()` e
-  exclui pelo `TaskCard`. Ela não cria tarefas.
-- **Criação de tarefas**: pelos botões **Nova tarefa** do `Header` e da
-  `Sidebar`, em qualquer página. O `Layout` guarda o estado `modalAberto`
-  (`abrirModal`/`fecharModal`) e renderiza o `TaskModal`.
+- **Página `Tasks`**: lê a lista, o carregamento e o erro do `useTarefas()`,
+  exclui pelo `TaskCard` e tem o próprio botão **Nova tarefa**, que pega
+  `abrirTaskModal` do `Layout` com `useOutletContext<LayoutContext>()`.
+- **Criação de tarefas**: os três botões **Nova tarefa** (`Sidebar`, `Header` e
+  página Tasks) abrem a mesma e única instância do `TaskModal`. O `Layout` guarda
+  só o estado `taskModalAberto` (`abrirTaskModal`/`fecharTaskModal`), passa
+  `aoNovaTarefa` ao `Header` e à `Sidebar` e repassa `abrirTaskModal` às páginas
+  pelo `<Outlet context>`. Os dados e as operações das tarefas ficam no
+  `TarefasProvider`, não no `Layout`.
 - **`TaskModal`** (`src/components/TaskModal/`): props
   `{ aberto: boolean; aoFechar: () => void }`. Mostra uma camada sobre a página
   com o `TaskForm` dentro. Salvar chama `adicionarTarefa` e depois `aoFechar`.
@@ -108,7 +112,8 @@ Rotas (filhas do `Layout`):
 
 ## Divisão do trabalho
 
-A `main` tem o código da aula 06 com o contexto de tarefas e o `TaskModal`.
+A `main` tem o código da aula 06 e da continuação (`TaskModal`, estado
+compartilhado e separação de responsabilidades).
 Cada integrante trabalha na sua branch e abre PR para a `main`:
 
 | Branch | Responsável por |
