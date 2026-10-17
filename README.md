@@ -1,7 +1,8 @@
 # TaskFlow
 
 Gerenciador de tarefas feito como trabalho em grupo da faculdade, partindo do
-código da **aula 06** (Prof. José Carmino), seções 3 a 7.
+código da **aula 06** (Prof. José Carmino), seções 3 a 7, e da continuação
+"TaskModal, estado compartilhado e separação de responsabilidades".
 
 **Stack:** React + TypeScript + Vite, React Router, Axios, lucide-react.
 **API:** [CrudCrud](https://crudcrud.com) — recurso `/tarefas`.
@@ -57,9 +58,10 @@ src/
 └── main.tsx          render + estilos globais
 ```
 
-Os arquivos CSS são os fornecidos pelo professor (`taskflow_css.zip`), exceto
-o `TaskModal.css`, que segue o mesmo padrão BEM e usa as variáveis de
-`styles/variables.css`.
+Os arquivos CSS são os fornecidos pelo professor no `taskflow_css.zip`, e o
+`TaskModal.css` é o da seção 6 da continuação. `Header.css`, `Layout.css` e
+`TaskForm.css` têm no final algumas regras a mais, para o menu em telas menores
+e para a mensagem de erro do formulário.
 
 Rotas (filhas do `Layout`):
 
@@ -69,6 +71,7 @@ Rotas (filhas do `Layout`):
 | `/proximas` | `Upcoming` (Próximas) |
 | `/tarefas` | `Tasks` (Todas as tarefas) |
 | `/concluidas` | `Completed` (Concluídas) |
+| qualquer outro | redireciona para `/` |
 
 ## Como funciona
 
@@ -118,6 +121,6 @@ Cada integrante trabalha na sua branch e abre PR para a `main`:
 
 | Branch | Responsável por |
 | --- | --- |
-| `gabriel-santoro` | camada de serviço (`src/services/tarefaService.ts`) e abertura do modal no `Layout`/`Header` |
-| `ronaldo-vieira` | contexto compartilhado de tarefas |
+| `gabriel-santoro` | camada de serviço (`src/services/tarefaService.ts`) e abertura do modal (`Layout`, `Header`, `Sidebar` e botão da página Tasks) |
+| `ronaldo-vieira` | contexto compartilhado de tarefas (`TarefasContext`) |
 | `gabriel-marinho` | `TaskModal` usando o `TaskForm` |
