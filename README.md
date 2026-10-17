@@ -39,8 +39,8 @@ src/
 │   ├── TaskForm/     TaskForm.tsx + TaskForm.css
 │   ├── TaskList/     TaskList.tsx + TaskList.css
 │   └── TaskModal/    TaskModal.tsx + TaskModal.css
-├── context/
-│   └── TaskContext.tsx    TaskProvider e o hook useTasks()
+├── contexts/
+│   └── TarefasContext.tsx TarefasProvider e o hook useTarefas()
 ├── pages/
 │   ├── Completed/    Completed.tsx
 │   ├── Tasks/        Tasks.tsx + Tasks.css
@@ -53,8 +53,8 @@ src/
 │   └── variables.css
 ├── types/
 │   └── Tarefa.ts     tipos Tarefa e Prioridade
-├── App.tsx           BrowserRouter + rotas
-└── main.tsx          render + TaskProvider + estilos globais
+├── App.tsx           BrowserRouter + TarefasProvider + rotas
+└── main.tsx          render + estilos globais
 ```
 
 Os arquivos CSS são os fornecidos pelo professor (`taskflow_css.zip`), exceto
@@ -72,13 +72,14 @@ Rotas (filhas do `Layout`):
 
 ## Como funciona
 
-- **`TaskContext`** (`src/context/TaskContext.tsx`): o `TaskProvider` envolve o
-  `App` em `main.tsx` e guarda `tarefas`, `carregando` e `erro`. Ao montar, ele
+- **`TarefasContext`** (`src/contexts/TarefasContext.tsx`): o `TarefasProvider`
+  envolve as `Routes` em `App.tsx`, então o `Layout` e as páginas ficam abaixo
+  dele. Ele guarda `tarefas`, `carregando` e `erro`. Ao montar, ele
   carrega as tarefas com `listarTarefas()` (`GET /tarefas`) num `useEffect` e
   expõe `adicionarTarefa` (`criarTarefa()`, `POST /tarefas`) e `removerTarefa`
   (`excluirTarefa()`, `DELETE /tarefas/:id`). Componentes e páginas acessam tudo
-  isso pelo hook `useTasks()`.
-- **Página `Tasks`**: lê a lista, o carregamento e o erro do `useTasks()` e
+  isso pelo hook `useTarefas()`.
+- **Página `Tasks`**: lê a lista, o carregamento e o erro do `useTarefas()` e
   exclui pelo `TaskCard`. Ela não cria tarefas.
 - **Criação de tarefas**: pelos botões **Nova tarefa** do `Header` e da
   `Sidebar`, em qualquer página. O `Layout` guarda o estado `modalAberto`
