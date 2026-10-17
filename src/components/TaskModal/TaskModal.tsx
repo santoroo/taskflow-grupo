@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useTasks } from "../../context/TaskContext";
+import { useTarefas } from "../../contexts/TarefasContext";
 import type { Tarefa } from "../../types/Tarefa";
 import { TaskForm } from "../TaskForm/TaskForm";
 
@@ -9,7 +9,7 @@ import "./TaskModal.css";
 type TaskModalProps = { aberto: boolean; aoFechar: () => void };
 
 export function TaskModal({ aberto, aoFechar }: Readonly<TaskModalProps>) {
-  const { adicionarTarefa } = useTasks();
+  const { adicionarTarefa } = useTarefas();
 
   useEffect(() => {
     if (!aberto) {
