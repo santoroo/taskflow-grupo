@@ -91,8 +91,8 @@ Rotas (filhas do `Layout`):
 - **`TaskModal`** (`src/components/TaskModal/`): props
   `{ aberto: boolean; aoFechar: () => void }`. Mostra uma camada sobre a página
   com o `TaskForm` dentro. Salvar chama `adicionarTarefa` e depois `aoFechar`.
-  Fecha também com **Cancelar**, com a tecla **Esc** e com um clique fora da
-  caixa do formulário.
+  Fecha também pelo botão **X** no canto da janela, com **Cancelar**, com a
+  tecla **Esc** e com um clique fora da caixa do formulário.
 - **Telas menores (até 960px)**: a `Sidebar` fica escondida e abre pelo botão de
   menu do `Header`. Ela fecha ao escolher um link, ao clicar em **Nova tarefa**
   ou ao clicar fora dela.
