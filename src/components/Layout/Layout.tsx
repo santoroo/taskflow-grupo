@@ -6,15 +6,15 @@ import { TaskModal } from "../TaskModal/TaskModal";
 import "./Layout.css";
 
 export function Layout() {
-  // Estado de abertura do modal de nova tarefa.
-  const [modalAberto, setModalAberto] = useState(false);
+  const [taskModalAberto, setTaskModalAberto] =
+    useState(false);
 
-  function abrirModal() {
-    setModalAberto(true);
+  function abrirTaskModal() {
+    setTaskModalAberto(true);
   }
 
-  function fecharModal() {
-    setModalAberto(false);
+  function fecharTaskModal() {
+    setTaskModalAberto(false);
   }
 
   // Em telas menores a Sidebar fica escondida e abre pelo botão de menu do Header.
@@ -31,9 +31,9 @@ export function Layout() {
   return (
     <div className="app-layout">
       <Sidebar
-        abrirModal={abrirModal}
+        aoNovaTarefa={abrirTaskModal}
         menuAberto={menuAberto}
-        fecharMenu={fecharMenu}
+        aoFecharMenu={fecharMenu}
       />
 
       {menuAberto && (
@@ -41,14 +41,20 @@ export function Layout() {
       )}
 
       <div className="app-layout__content">
-        <Header abrirModal={abrirModal} abrirMenu={abrirMenu} />
+        <Header
+          aoNovaTarefa={abrirTaskModal}
+          aoAbrirMenu={abrirMenu}
+        />
 
         <main className="app-layout__main">
           <Outlet />
         </main>
       </div>
 
-      <TaskModal aberto={modalAberto} aoFechar={fecharModal} />
+      <TaskModal
+        aberto={taskModalAberto}
+        aoFechar={fecharTaskModal}
+      />
     </div>
   );
 }

@@ -9,17 +9,21 @@ const itensMenu = [
   { titulo: "Concluídas", caminho: "/concluidas", icone: CircleCheckBig },
 ];
 
-// Os estados do modal e do menu (telas menores) ficam no Layout.
 type SidebarProps = {
-  abrirModal: () => void;
+  aoNovaTarefa: () => void;
+  // Em telas menores a Sidebar abre como menu e fecha depois de uma escolha.
   menuAberto: boolean;
-  fecharMenu: () => void;
+  aoFecharMenu: () => void;
 };
 
-export function Sidebar({ abrirModal, menuAberto, fecharMenu }: Readonly<SidebarProps>) {
+export function Sidebar({
+  aoNovaTarefa,
+  menuAberto,
+  aoFecharMenu,
+}: Readonly<SidebarProps>) {
   function abrirNovaTarefa() {
-    fecharMenu();
-    abrirModal();
+    aoFecharMenu();
+    aoNovaTarefa();
   }
 
   return (
@@ -49,7 +53,7 @@ export function Sidebar({ abrirModal, menuAberto, fecharMenu }: Readonly<Sidebar
             <NavLink
               key={item.caminho}
               to={item.caminho}
-              onClick={fecharMenu}
+              onClick={aoFecharMenu}
               className={({ isActive }) =>
                 isActive
                   ? "sidebar__link sidebar__link--active"

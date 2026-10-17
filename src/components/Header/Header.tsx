@@ -1,17 +1,23 @@
 import { Menu, Plus, Search } from "lucide-react";
 import "./Header.css";
 
-// abrirModal e abrirMenu vêm do Layout, que guarda o estado do modal e do menu.
-type HeaderProps = { abrirModal: () => void; abrirMenu: () => void };
+type HeaderProps = {
+  aoNovaTarefa: () => void;
+  // Abre a Sidebar em telas menores.
+  aoAbrirMenu: () => void;
+};
 
-export function Header({ abrirModal, abrirMenu }: Readonly<HeaderProps>) {
+export function Header({
+  aoNovaTarefa,
+  aoAbrirMenu,
+}: Readonly<HeaderProps>) {
   return (
     <header className="header">
       <button
         className="header__menu"
         type="button"
         aria-label="Abrir menu"
-        onClick={abrirMenu}
+        onClick={aoAbrirMenu}
       >
         <Menu size={20} />
       </button>
@@ -25,7 +31,11 @@ export function Header({ abrirModal, abrirMenu }: Readonly<HeaderProps>) {
         />
       </div>
 
-      <button className="header__new-task" type="button" onClick={abrirModal}>
+      <button
+        className="header__new-task"
+        type="button"
+        onClick={aoNovaTarefa}
+      >
         <Plus size={18} />
         Nova tarefa
       </button>
