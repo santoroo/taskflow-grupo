@@ -5,6 +5,10 @@ import { Sidebar } from "../Sidebar/Sidebar";
 import { TaskModal } from "../TaskModal/TaskModal";
 import "./Layout.css";
 
+export type LayoutContext = {
+  abrirTaskModal: () => void;
+};
+
 export function Layout() {
   const [taskModalAberto, setTaskModalAberto] =
     useState(false);
@@ -47,7 +51,11 @@ export function Layout() {
         />
 
         <main className="app-layout__main">
-          <Outlet />
+          <Outlet
+            context={{
+              abrirTaskModal,
+            }}
+          />
         </main>
       </div>
 
