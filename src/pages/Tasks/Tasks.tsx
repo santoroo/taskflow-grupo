@@ -1,10 +1,20 @@
+import { useOutletContext } from "react-router-dom";
+import type { LayoutContext } from "../../components/Layout/Layout";
 import { TaskList } from "../../components/TaskList/TaskList";
 import { useTarefas } from "../../contexts/TarefasContext";
-
 import "./Tasks.css";
 
 export function Tasks() {
-  const { tarefas, carregando, erro, removerTarefa } = useTarefas();
+  const {
+    abrirTaskModal,
+  } = useOutletContext<LayoutContext>();
+
+  const {
+    tarefas,
+    carregando,
+    erro,
+    removerTarefa,
+  } = useTarefas();
 
   return (
     <section className="tasks-page">
@@ -21,6 +31,13 @@ export function Tasks() {
             cadastradas.
           </p>
         </div>
+
+        <button
+          type="button"
+          onClick={abrirTaskModal}
+        >
+          Nova tarefa
+        </button>
       </div>
 
       {erro && (
@@ -32,7 +49,10 @@ export function Tasks() {
       {carregando ? (
         <p>Carregando tarefas...</p>
       ) : (
-        <TaskList tarefas={tarefas} aoExcluir={removerTarefa} />
+        <TaskList
+          tarefas={tarefas}
+          aoExcluir={removerTarefa}
+        />
       )}
     </section>
   );
