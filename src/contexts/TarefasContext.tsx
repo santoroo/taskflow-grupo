@@ -1,6 +1,11 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import type { ReactNode } from "react";
-
 import {
   apiConfigurada,
   criarTarefa,
@@ -9,24 +14,38 @@ import {
 } from "../services/tarefaService";
 import type { Tarefa } from "../types/Tarefa";
 
-type TaskContextValor = {
+type NovaTarefa = Omit<Tarefa, "_id">;
+
+type TarefasContextType = {
   tarefas: Tarefa[];
   carregando: boolean;
   erro: string;
-  adicionarTarefa: (novaTarefa: Omit<Tarefa, "_id">) => Promise<void>;
-  removerTarefa: (id: string) => Promise<void>;
+  adicionarTarefa: (
+    novaTarefa: NovaTarefa,
+  ) => Promise<void>;
+  removerTarefa: (
+    id: string,
+  ) => Promise<void>;
 };
 
-const TaskContext = createContext<TaskContextValor | null>(null);
+const TarefasContext =
+  createContext<TarefasContextType | null>(null);
 
-type TaskProviderProps = { children: ReactNode };
+type TarefasProviderProps = {
+  children: ReactNode;
+};
 
-export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+export function TarefasProvider({
+  children,
+}: Readonly<TarefasProviderProps>) {
+  const [tarefas, setTarefas] =
+    useState<Tarefa[]>([]);
 
-  const [carregando, setCarregando] = useState(true);
+  const [carregando, setCarregando] =
+    useState(true);
 
-  const [erro, setErro] = useState("");
+  const [erro, setErro] =
+    useState("");
 
   // Ids com exclusão em andamento: evita mandar dois DELETE no clique duplo.
   const idsExcluindo = useRef(new Set<string>());
@@ -38,7 +57,6 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
         setErro("");
 
         const dados = await listarTarefas();
-
         setTarefas(dados);
       } catch {
         setErro(
@@ -54,17 +72,28 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
     carregarTarefas();
   }, []);
 
-  // Sem try/catch: se a API falhar, o erro chega ao TaskForm, que avisa
-  // dentro do modal e mantém o que foi digitado.
-  async function adicionarTarefa(novaTarefa: Omit<Tarefa, "_id">) {
-    const tarefaCriada = await criarTarefa(novaTarefa);
+  async function adicionarTarefa(
+    novaTarefa: NovaTarefa,
+  ) {
+    try {
+      setErro("");
 
-    setErro("");
+      const tarefaCriada =
+        await criarTarefa(novaTarefa);
 
-    setTarefas((tarefasAtuais) => [
-      tarefaCriada,
-      ...tarefasAtuais,
-    ]);
+      setTarefas((tarefasAtuais) => [
+        tarefaCriada,
+        ...tarefasAtuais,
+      ]);
+    } catch {
+      setErro(
+        "Não foi possível criar a tarefa.",
+      );
+
+      throw new Error(
+        "Não foi possível criar a tarefa.",
+      );
+    }
   }
 
   async function removerTarefa(id: string) {
@@ -94,21 +123,30 @@ export function TaskProvider({ children }: Readonly<TaskProviderProps>) {
   }
 
   return (
-    <TaskContext.Provider
-      value={{ tarefas, carregando, erro, adicionarTarefa, removerTarefa }}
+    <TarefasContext.Provider
+      value={{
+        tarefas,
+        carregando,
+        erro,
+        adicionarTarefa,
+        removerTarefa,
+      }}
     >
       {children}
-    </TaskContext.Provider>
+    </TarefasContext.Provider>
   );
 }
 
-// O hook fica junto do TaskProvider; editar este arquivo só recarrega a página no dev.
+// O hook fica junto do TarefasProvider; editar este arquivo só recarrega a página no dev.
 // oxlint-disable-next-line react/only-export-components
-export function useTasks() {
-  const contexto = useContext(TaskContext);
+export function useTarefas() {
+  const contexto =
+    useContext(TarefasContext);
 
   if (!contexto) {
-    throw new Error("useTasks deve ser usado dentro de um TaskProvider.");
+    throw new Error(
+      "useTarefas deve ser utilizado dentro de TarefasProvider.",
+    );
   }
 
   return contexto;

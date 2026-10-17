@@ -1,10 +1,10 @@
 import { TaskList } from "../../components/TaskList/TaskList";
-import { useTasks } from "../../context/TaskContext";
+import { useTarefas } from "../../contexts/TarefasContext";
 
 import "./Tasks.css";
 
 export function Tasks() {
-  const { tarefas, carregando, erro, removerTarefa } = useTasks();
+  const { tarefas, carregando, erro, removerTarefa } = useTarefas();
 
   return (
     <section className="tasks-page">
